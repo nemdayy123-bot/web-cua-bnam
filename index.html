@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đọc sách • Học công nghệ • Sống chủ động</title>
+
+<style>
+:root{
+  --cream:#fff8df;
+  --teal:#087f78;
+  --green:#2f8b55;
+  --yellow:#f6c62e;
+  --gold:#e9a91b;
+  --ink:#164c48;
+  --white:#fffdf5;
+  --shadow:0 18px 45px rgba(25,83,72,.12);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  line-height:1.65;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* THANH TIẾN ĐỘ CUỘN */
+.scroll-progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--teal),var(--yellow));
+  z-index:100;
+}
+
+/* NAVBAR */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(255,248,223,.9);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(8,127,120,.12);
+}
+
+.nav-inner{
+  max-width:1180px;
+  margin:auto;
+  padding:12px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-weight:900;
+  color:var(--teal);
+  font-size:1.1rem;
+}
+
+.nav-links{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.nav-links a{
+  padding:8px 13px;
+  border-radius:999px;
+  font-weight:700;
+}
+
+.nav-links a:hover{
+  background:#fff0a8;
+}
+
+/* HERO */
+.hero{
+  position:relative;
+  overflow:hidden;
+  padding:80px 20px 90px;
+  background:
+    radial-gradient(circle at 12% 18%,#ffe36d 0 7%,transparent 7.5%),
+    radial-gradient(circle at 91% 20%,#76b98c 0 10%,transparent 10.5%),
+    linear-gradient(135deg,#fff9e8,#eef8df 58%,#fff3bb);
+}
+
+.hero:before,
+.hero:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+}
+
+.hero:before{
+  width:420px;
+  height:190px;
+  background:#16877e;
+  left:-120px;
+  top:-80px;
+  transform:rotate(-12deg);
+}
+
+.hero:after{
+  width:470px;
+  height:170px;
+  background:#f6c62e;
+  right:-120px;
+  bottom:-75px;
+  transform:rotate(-10deg);
+}
+
+.hero-grid{
+  max-width:1180px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:45px;
+  align-items:center;
+  position:relative;
+  z-index:1;
+}
+
+.kicker{
+  display:inline-block;
+  background:var(--yellow);
+  padding:7px 18px;
+  border-radius:999px;
+  font-weight:900;
+}
+
+h1{
+  font-size:clamp(3rem,7vw,6.6rem);
+  line-height:.92;
+  margin:20px 0 15px;
+  color:var(--teal);
+  letter-spacing:-.06em;
+}
+
+h1 span{
+  display:block;
+  color:var(--gold);
+}
+
+.lead{
+  font-size:1.18rem;
+  max-width:650px;
+}
+
+.cta{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px 20px;
+  border-radius:999px;
+  font-weight:900;
+}
+
+.btn.primary{
+  background:var(--teal);
+  color:white;
+}
+
+.btn.secondary{
+  background:white;
+  border:2px solid #e5d98d;
+}
+
+/* SÁCH */
+.book-stack{
+  position:relative;
+  min-height:390px;
+  display:grid;
+  place-items:center;
+}
+
+.book{
+  width:min(430px,90%);
+  height:260px;
+  background:#fff;
+  border:5px solid var(--teal);
+  border-radius:10px 30px 30px 10px;
+  box-shadow:var(--shadow);
+  transform:rotate(-5deg);
+  position:relative;
+  padding:45px 38px;
+  transition:.3s;
+}
+
+.book:hover{
+  transform:rotate(-2deg) translateY(-8px) scale(1.03);
+  box-shadow:0 25px 55px rgba(25,83,72,.22);
+}
+
+.book h2{
+  position:relative;
+  font-size:2.2rem;
+  color:var(--teal);
+}
+
+.book p{
+  position:relative;
+  font-weight:700;
+}
+
+.bookmark{
+  position:absolute;
+  right:48px;
+  top:-15px;
+  width:48px;
+  height:105px;
+  background:var(--yellow);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);
+}
+
+/* SECTION */
+.section{
+  max-width:1180px;
+  margin:auto;
+  padding:78px 20px;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:42px;
+}
+
+.eyebrow{
+  color:var(--gold);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.15em;
+}
+
+.section-title h2{
+  font-size:clamp(2.2rem,5vw,4rem);
+  line-height:1;
+  margin:8px 0;
+  color:var(--teal);
+}
+
+.section-title p{
+  max-width:680px;
+  margin:12px auto;
+}
+
+/* CARD */
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
+
+.card{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(8,127,120,.12);
+  border-radius:28px;
+  padding:28px;
+  box-shadow:var(--shadow);
+  transition:.28s;
+}
+
+.card:hover{
+  transform:translateY(-10px) scale(1.015);
+  box-shadow:0 24px 50px rgba(8,127,120,.2);
+}
+
+.icon{
+  width:56px;
+  height:56px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  background:#fff0a8;
+  font-size:1.7rem;
+}
+
+.card h3{
+  font-size:1.35rem;
+}
+
+/* GIA ĐÌNH - XÃ HỘI */
+.split{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+.panel{
+  padding:35px;
+  min-height:320px;
+  border-radius:34px;
+  transition:.28s;
+}
+
+.panel:hover{
+  transform:translateY(-7px);
+  box-shadow:0 22px 45px rgba(25,83,72,.16);
+}
+
+.family{
+  background:#ffeaa0;
+}
+
+.society{
+  background:#d9f0d7;
+}
+
+.panel h3{
+  font-size:2rem;
+  color:var(--teal);
+}
+
+.ribbon{
+  display:inline-block;
+  background:var(--teal);
+  color:white;
+  padding:7px 16px;
+  border-radius:999px;
+  font-weight:900;
+}
+
+.quote{
+  margin-top:18px;
+  font-weight:900;
+  font-style:italic;
+}
+
+/* KỸ NĂNG */
+.skills{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.skill{
+  background:white;
+  border-radius:22px;
+  padding:24px;
+  text-align:center;
+  border-bottom:6px solid var(--yellow);
+  box-shadow:0 10px 25px rgba(20,80,70,.08);
+  transition:.28s;
+}
+
+.skill:hover{
+  transform:translateY(-8px) scale(1.025);
+  box-shadow:0 18px 35px rgba(20,80,70,.15);
+}
+
+.skill b{
+  display:block;
+  margin-top:10px;
+}
+
+/* CHECKLIST */
+.progress-box{
+  background:#fff;
+  border-radius:30px;
+  padding:25px 28px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow);
+}
+
+.progress-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.progress-top h3{
+  margin:0;
+  color:var(--teal);
+}
+
+.progress-number{
+  font-size:2.2rem;
+  font-weight:950;
+  color:var(--gold);
+}
+
+.progress-track{
+  height:14px;
+  background:#eef0d9;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:17px;
+}
+
+.progress-fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--teal),var(--yellow));
+  border-radius:999px;
+  transition:width .45s ease;
+}
+
+.todo-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:17px;
+}
+
+.todo-card{
+  width:100%;
+  border:2px solid transparent;
+  background:rgba(255,255,255,.82);
+  border-radius:25px;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-align:left;
+  color:var(--ink);
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(20,80,70,.07);
+  transition:.25s;
+}
+
+.todo-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 18px 35px rgba(20,80,70,.15);
+  border-color:#f0cf52;
+}
+
+.todo-card.done{
+  background:#e4f3dc;
+  border-color:#63a76c;
+}
+
+.todo-check{
+  width:32px;
+  height:32px;
+  min-width:32px;
+  border-radius:50%;
+  border:2px solid #bdd2b8;
+  background:#fff;
+  display:grid;
+  place-items:center;
+  color:transparent;
+  font-weight:1000;
+}
+
+.todo-card.done .todo-check{
+  background:var(--teal);
+  color:#fff;
+}
+
+.todo-icon{
+  font-size:2rem;
+}
+
+.todo-text b{
+  display:block;
+}
+
+.todo-text small{
+  display:block;
+  color:#52716c;
+}
+
+.checklist-message{
+  margin-top:20px;
+  text-align:center;
+  font-weight:800;
+  color:var(--teal);
+  background:#fff4bd;
+  border-radius:999px;
+  padding:12px 18px;
+}
+
+/* ẢNH */
+.poster{
+  background:#fff;
+  border-radius:35px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  transition:.3s;
+}
+
+.poster:hover{
+  transform:translateY(-5px);
+}
+
+.poster img{
+  width:100%;
+  display:block;
+  border-radius:25px;
+}
+
+/* THÔNG ĐIỆP */
+.note{
+  background:var(--teal);
+  color:white;
+  border-radius:38px;
+  padding:45px 25px;
+  text-align:center;
+}
+
+.note h2{
+  font-size:clamp(2rem,5vw,3.7rem);
+}
+
+.note strong{
+  color:#ffe05c;
+}
+
+/* HIỆU ỨNG CUỘN */
+.reveal-on-scroll{
+  opacity:0;
+  transform:translateY(38px);
+  transition:
+    opacity .7s ease,
+    transform .7s cubic-bezier(.2,.75,.2,1);
+}
+
+.reveal-on-scroll.revealed{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* FOOTER */
+footer{
+  background:#075f59;
+  color:white;
+  padding:35px 20px;
+  text-align:center;
+}
+
+footer p{
+  margin:5px;
+}
+
+.footer-contact{
+  margin-top:18px;
+  font-size:1.1rem;
+}
+
+.footer-contact a{
+  color:#ffe08a;
+  font-weight:900;
+}
+
+/* RESPONSIVE */
+@media(max-width:850px){
+
+  .hero-grid,
+  .split{
+    grid-template-columns:1fr;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .skills{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .todo-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px){
+
+  .nav-inner{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  h1{
+    font-size:3.35rem;
+  }
+
+  .skills{
+    grid-template-columns:1fr;
+  }
+
+  .section{
+    padding:55px 16px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *{
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+
+  .reveal-on-scroll{
+    opacity:1;
+    transform:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <div class="nav-inner">
+
+    <div class="logo">
+      📚 TRI THỨC + CÔNG NGHỆ
+    </div>
+
+    <div class="nav-links">
+      <a href="#gioi-thieu">Giới thiệu</a>
+      <a href="#gia-dinh">Gia đình</a>
+      <a href="#ky-nang">Kỹ năng</a>
+      <a href="#checklist">Thử thách</a>
+    </div>
+
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<header class="hero">
+
+  <div class="hero-grid">
+
+    <div>
+
+      <span class="kicker">
+        CÙNG NHAU HỌC MỖI NGÀY ✨
+      </span>
+
+      <h1>
+        ĐỌC SÁCH
+        <span>TÌM HIỂU</span>
+        & HỌC CNTT
+      </h1>
+
+      <p class="lead">
+        Khuyến khích đọc sách, chủ động tìm hiểu và rèn kỹ năng
+        ứng dụng công nghệ thông tin vào đời sống.
+      </p>
+
+      <div class="cta">
+
+        <a class="btn primary" href="#gioi-thieu">
+          Khám phá nội dung →
+        </a>
+
+        <a class="btn secondary" href="#checklist">
+          Thử thách của bạn
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="book-stack">
+
+      <div class="bookmark"></div>
+
+      <div class="book">
+
+        <h2>📖 Mở sách</h2>
+
+        <p>
+          Mở ra tri thức,<br>
+          ý tưởng và những cơ hội mới.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<main>
+
+<!-- GIỚI THIỆU -->
+<section class="section" id="gioi-thieu">
+
+  <div class="section-title">
+
+    <div class="eyebrow">
+      Giới thiệu
+    </div>
+
+    <h2>
+      Đọc để biết — học để làm
+    </h2>
+
+    <p>
+      Đọc sách giúp mở rộng hiểu biết; học công nghệ giúp
+      biến hiểu biết thành năng lực thực tế.
+    </p>
+
+  </div>
+
+
+  <div class="cards">
+
+    <article class="card">
+
+      <div class="icon">📚</div>
+
+      <h3>
+        Nuôi dưỡng tri thức
+      </h3>
+
+      <p>
+        Mỗi trang sách là một cơ hội khám phá ý tưởng,
+        con người và những cách nhìn mới.
+      </p>
+
+    </article>
+
+
+    <article class="card">
+
+      <div class="icon">💡</div>
+
+      <h3>
+        Phát triển tư duy
+      </h3>
+
+      <p>
+        Đọc, đặt câu hỏi và thử nghiệm giúp rèn khả năng
+        suy nghĩ độc lập, sáng tạo và giải quyết vấn đề.
+      </p>
+
+    </article>
+
+
+    <article class="card">
+
+      <div class="icon">💻</div>
+
+      <h3>
+        Ứng dụng vào đời sống
+      </h3>
+
+      <p>
+        Biết sử dụng máy tính, Internet và công cụ số
+        giúp học tập và làm việc hiệu quả hơn.
+      </p>
+
+    </article>
+
+  </div>
+
+</section>
+
+
+<!-- GIA ĐÌNH / XÃ HỘI -->
+<section class="section" id="gia-dinh">
+
+  <div class="section-title">
+
+    <div class="eyebrow">
+      Tầm quan trọng
+    </div>
+
+    <h2>
+      Gia đình cùng học, cùng tiến bộ
+    </h2>
+
+  </div>
+
+
+  <div class="split">
+
+    <div class="panel family">
+
+      <span class="ribbon">
+        🏠 Với gia đình
+      </span>
+
+      <ul>
+
+        <li>
+          <b>Gắn kết yêu thương:</b>
+          cùng đọc sách và học công nghệ.
+        </li>
+
+        <li>
+          <b>Nâng cao kỹ năng sống:</b>
+          sử dụng công nghệ an toàn.
+        </li>
+
+        <li>
+          <b>Xây dựng gia đình hiện đại:</b>
+          chủ động thích nghi với đổi mới.
+        </li>
+
+      </ul>
+
+      <div class="quote">
+        “Gia đình đồng hành — cùng tri thức và công nghệ.”
+      </div>
+
+    </div>
+
+
+    <div class="panel society">
+
+      <span class="ribbon">
+        🌍 Với xã hội
+      </span>
+
+      <ul>
+
+        <li>
+          <b>Phát triển nguồn nhân lực:</b>
+          người học có kỹ năng số.
+        </li>
+
+        <li>
+          <b>Thúc đẩy đổi mới:</b>
+          tạo ra ý tưởng và giải pháp mới.
+        </li>
+
+        <li>
+          <b>Xây dựng xã hội văn minh:</b>
+          công dân số chủ động.
+        </li>
+
+      </ul>
+
+      <div class="quote">
+        Mỗi người học tốt → xã hội tốt đẹp hơn. 🌱
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- KỸ NĂNG -->
+<section class="section" id="ky-nang">
+
+  <div class="section-title">
+
+    <div class="eyebrow">
+      Kỹ năng ứng dụng CNTT
+    </div>
+
+    <h2>
+      Học điều gần gũi, dùng ngay
+    </h2>
+
+  </div>
+
+
+  <div class="skills">
+
+    <div class="skill">
+      🔎
+      <b>Tìm kiếm thông tin</b>
+      <span>
+        Tìm, chọn và kiểm chứng nguồn tin.
+      </span>
+    </div>
+
+    <div class="skill">
+      📝
+      <b>Soạn thảo</b>
+      <span>
+        Tạo tài liệu và nội dung số.
+      </span>
+    </div>
+
+    <div class="skill">
+      ☁️
+      <b>Lưu trữ & chia sẻ</b>
+      <span>
+        Quản lý tệp và làm việc trực tuyến.
+      </span>
+    </div>
+
+    <div class="skill">
+      🔐
+      <b>An toàn số</b>
+      <span>
+        Bảo vệ tài khoản và dữ liệu.
+      </span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CHECKLIST -->
+<section class="section" id="checklist">
+
+  <div class="section-title">
+
+    <div class="eyebrow">
+      Thử thách của bạn
+    </div>
+
+    <h2>
+      Đánh dấu những điều bạn đã làm được ✓
+    </h2>
+
+    <p>
+      Mỗi việc nhỏ hôm nay là một bước tiến gần hơn
+      tới phiên bản chủ động, ham học và sáng tạo.
+    </p>
+
+  </div>
+
+
+  <div class="progress-box">
+
+    <div class="progress-top">
+
+      <div>
+
+        <span class="ribbon">
+          🌱 Hành trình học tập
+        </span>
+
+        <h3 id="progressTitle">
+          Bạn đã hoàn thành 0/6 việc
+        </h3>
+
+      </div>
+
+      <div class="progress-number" id="progressNumber">
+        0%
+      </div>
+
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+  </div>
+
+
+  <div class="todo-grid">
+
+    <button class="todo-card" type="button" data-task="read">
+
+      <span class="todo-check">✓</span>
+
+      <span class="todo-icon">📖</span>
+
+      <span class="todo-text">
+
+        <b>
+          Đọc sách mỗi tuần 1 quyển
+        </b>
+
+        <small>
+          Dành thời gian khám phá một cuốn sách mới.
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button class="todo-card" type="button" data-task="explore">
+
+      <span class="todo-check">✓</span>
+
+      <span class="todo-icon">🔍</span>
+
+      <span class="todo-text">
+
+        <b>
+          Mày mò tìm hiểu kỹ năng công nghệ
+        </b>
+
+        <small>
+          Thử một công cụ hoặc tính năng mới.
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button class="todo-card" type="button" data-task="practice">
+
+      <span class="todo-check">✓</span>
+
+      <span class="todo-icon">💻</span>
+
+      <span class="todo-text">
+
+        <b>
+          Thực hành một kỹ năng CNTT
+        </b>
+
+        <small>
+          Tạo tài liệu, trình chiếu hoặc sản phẩm số.
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button class="todo-card" type="button" data-task="search">
+
+      <span class="todo-check">✓</span>
+
+      <span class="todo-icon">🌐</span>
+
+      <span class="todo-text">
+
+        <b>
+          Tìm kiếm và kiểm chứng thông tin
+        </b>
+
+        <small>
+          Chọn nguồn tin đáng tin cậy.
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button class="todo-card" type="button" data-task="safe">
+
+      <span class="todo-check">✓</span>
+
+      <span class="todo-icon">🔐</span>
+
+      <span class="todo-text">
+
+        <b>
+          Học một mẹo an toàn số
+        </b>
+
+        <small>
+          Bảo vệ tài khoản và dữ liệu cá nhân.
+        </small>
+
+      </span>
+
+    </button>
+
+
+    <button class="todo-card" type="button" data-task="share">
+
+      <span class="todo-check">✓</span>
+
+      <span class="todo-icon">💡</span>
+
+      <span class="todo-text">
+
+        <b>
+          Chia sẻ điều mình đã học
+        </b>
+
+        <small>
+          Chia sẻ kiến thức hữu ích với người khác.
+        </small>
+
+      </span>
+
+    </button>
+
+  </div>
+
+
+  <div class="checklist-message" id="checklistMessage">
+
+    ✨ Hãy chọn một việc bạn đã hoàn thành để bắt đầu!
+
+  </div>
+
+</section>
+
+
+<!-- THÔNG ĐIỆP -->
+<section class="section">
+
+  <div class="note">
+
+    <h2>
+      Đọc sách hôm nay,
+      <br>
+      <strong>
+        kiến tạo tương lai ngày mai.
+      </strong>
+    </h2>
+
+    <p>
+      Hãy bắt đầu bằng một trang sách,
+      một kỹ năng mới và một việc nhỏ có thể
+      áp dụng ngay hôm nay. 😊
+    </p>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+
+  <p>
+    <b>
+      📚 Đọc sách • 💻 Học công nghệ • 🌱 Sống chủ động
+    </b>
+  </p>
+
+  <p>
+    Tri thức + Công nghệ = Cuộc sống tốt đẹp hơn!
+  </p>
+
+  <div class="footer-contact">
+
+    📞 Liên hệ:
+    <a href="tel:0971486096">
+      0971486096
+    </a>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   THANH TIẾN ĐỘ CUỘN
+========================= */
+
+const scrollBar = document.createElement("div");
+
+scrollBar.className = "scroll-progress";
+
+document.body.prepend(scrollBar);
+
+
+function updateScrollProgress(){
+
+  const max =
+    document.documentElement.scrollHeight -
+    window.innerHeight;
+
+  const progress =
+    max > 0
+    ? (window.scrollY / max) * 100
+    : 0;
+
+  scrollBar.style.width =
+    progress + "%";
+}
+
+
+window.addEventListener(
+  "scroll",
+  updateScrollProgress,
+  {passive:true}
+);
+
+updateScrollProgress();
+
+
+/* =========================
+   HIỆU ỨNG KHI CUỘN
+========================= */
+
+const revealElements =
+  document.querySelectorAll(
+    ".section-title, .card, .panel, .skill, .progress-box, .todo-card, .note"
+  );
+
+
+revealElements.forEach(
+  (element,index)=>{
+
+    element.classList.add(
+      "reveal-on-scroll"
+    );
+
+    element.style.transitionDelay =
+      Math.min(
+        (index % 4) * 70,
+        210
+      ) + "ms";
+
+  }
+);
+
+
+const observer =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(
+        entry => {
+
+          if(entry.isIntersecting){
+
+            entry.target.classList.add(
+              "revealed"
+            );
+
+            observer.unobserve(
+              entry.target
+            );
+
+          }
+
+        }
+      );
+
+    },
+    {
+      threshold:.12,
+      rootMargin:
+        "0px 0px -45px 0px"
+    }
+  );
+
+
+revealElements.forEach(
+  element =>
+    observer.observe(element)
+);
+
+
+/* =========================
+   CHECKLIST
+========================= */
+
+const cards =
+  [...document.querySelectorAll(
+    ".todo-card"
+  )];
+
+const fill =
+  document.getElementById(
+    "progressFill"
+  );
+
+const number =
+  document.getElementById(
+    "progressNumber"
+  );
+
+const title =
+  document.getElementById(
+    "progressTitle"
+  );
+
+const message =
+  document.getElementById(
+    "checklistMessage"
+  );
+
+
+const storageKey =
+  "doc-sach-cntt-checklist-v1";
+
+
+let state = {};
+
+try{
+
+  state =
+    JSON.parse(
+      localStorage.getItem(
+        storageKey
+      ) || "{}"
+    );
+
+}catch(error){
+
+  state = {};
+
+}
+
+
+function updateChecklist(){
+
+  const done =
+    cards.filter(
+      card =>
+        state[
+          card.dataset.task
+        ]
+    ).length;
+
+
+  const total =
+    cards.length;
+
+
+  const percent =
+    Math.round(
+      done / total * 100
+    );
+
+
+  cards.forEach(
+    card => {
+
+      const active =
+        !!state[
+          card.dataset.task
+        ];
+
+
+      card.classList.toggle(
+        "done",
+        active
+      );
+
+      card.setAttribute(
+        "aria-pressed",
+        active
+        ? "true"
+        : "false"
+      );
+
+    }
+  );
+
+
+  fill.style.width =
+    percent + "%";
+
+
+  number.textContent =
+    percent + "%";
+
+
+  title.textContent =
+    `Bạn đã hoàn thành ${done}/${total} việc`;
+
+
+  if(done === 0){
+
+    message.textContent =
+      "✨ Hãy chọn một việc bạn đã hoàn thành để bắt đầu!";
+
+  }
+  else if(done < total){
+
+    message.textContent =
+      `🌱 Tuyệt vời! Bạn đang tiến bộ. Còn ${total-done} việc nữa để hoàn thành thử thách.`;
+
+  }
+  else{
+
+    message.textContent =
+      "🎉 Xuất sắc! Bạn đã hoàn thành toàn bộ thử thách học tập.";
+
+  }
+
+}
+
+
+cards.forEach(
+  card => {
+
+    card.addEventListener(
+      "click",
+      () => {
+
+        const key =
+          card.dataset.task;
+
+
+        state[key] =
+          !state[key];
+
+
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify(state)
+        );
+
+
+        updateChecklist();
+
+      }
+    );
+
+  }
+);
+
+
+updateChecklist();
+
+</script>
+
+</body>
+</html>
